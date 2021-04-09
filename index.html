@@ -14,8 +14,8 @@
 <body style="margin: 0">
 
 <div class="container" id="app">
-    <div class="todo-add" style="display: none">
-        <form action="">
+    <div class="todo-add" id="todo-add" style="display: none">
+        <form action="" style="width: 100%">
             <h1 class="window-title">
                 Create New Tasks
             </h1>
@@ -53,83 +53,39 @@
             </button>
         </form>
     </div>
-    <div class="todo-container">
-        <div class="todo-list">
-            <div class="todo-element" v-if="status">
+    <div class="todo-content" id="todo-content">
+        <div class="todo-list" v-for="item in tasks">
+            <div class="todo-element" v-if="status" v-on:click="openTask()">
                 <button class="todo-item">
             <span class="item__title">
-                 {{message}}
+                 {{item.name}}
             </span>
                     <span class="item__time">
-                {{time}}
-            </span>
-                </button>
-            </div>
-
-            <div class="todo-element" v-if="status">
-                <button class="todo-item">
-            <span class="item__title">
-                 {{message}}
-            </span>
-                    <span class="item__time">
-                {{time}}
-            </span>
-                </button>
-            </div>
-
-            <div class="todo-element" v-if="status">
-                <button class="todo-item">
-            <span class="item__title">
-                 {{message}}
-            </span>
-                    <span class="item__time">
-                {{time}}
-            </span>
-                </button>
-            </div>
-
-            <div class="todo-element" v-if="status">
-                <button class="todo-item">
-            <span class="item__title">
-                 {{message}}
-            </span>
-                    <span class="item__time">
-                {{time}}
-            </span>
-                </button>
-            </div>
-
-            <div class="todo-element" v-if="status">
-                <button class="todo-item">
-            <span class="item__title">
-                 {{message}}
-            </span>
-                    <span class="item__time">
-                {{time}}
+                {{item.time}}
             </span>
                 </button>
             </div>
         </div>
 
-        <button class="add-btn">
+        <button class="add-btn" v-on:click="openNewTaskWindow()" id="addWindow">
             <img src="img/cross.svg" alt="">
         </button>
 
     </div>
-
-    <div class="todo-description" style="display:none;">
+    <div class="todo-description" id="todo-description" style="display:none;">
+        <a class="overlay" href=""></a>
         <form action="">
             <h2 class="todo-title field__title">
                 <div class="todo-color"></div>
                 <p>
-                    {{message}}
+                    lorem
                 </p>
             </h2>
 
             <div class="todo-date">
                 <img class="todo-calendar" src="img/calendar.svg" alt="">
                 <p>
-                    {{time}}
+                    date
                 </p>
             </div>
 

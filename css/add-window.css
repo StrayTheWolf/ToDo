@@ -1,11 +1,15 @@
-.todo-add{
+.todo-add {
+    width: 85vw;
+    position: absolute;
+    z-index: 2;
     background: #FFFFFF;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.185434);
     border-radius: 3px;
     margin: 30px 20px 150px 20px;
 }
 
-.todo-container {
+.todo-content {
+    z-index: 1;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -13,8 +17,7 @@
     align-items: center;
 }
 
-.window-title{
-    width: 100%;
+.window-title {
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
@@ -23,7 +26,7 @@
     padding-right: 47px;
 }
 
-.field__title{
+.field__title {
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
@@ -32,7 +35,7 @@
     padding-right: 47px;
 }
 
-.field-input{
+.field-input {
     mix-blend-mode: normal;
     opacity: 0.55;
     border: none;
@@ -43,14 +46,13 @@
     margin-bottom: 45px;
 }
 
-.field__date{
+.field__date {
     display: flex;
 }
 
-.date{
+.date {
     width: 55px;
     padding: 0;
-    margin-left: 45px;
 }
 
 .field-item_color {
@@ -64,7 +66,7 @@
     padding-bottom: 30px;
 }
 
-.field__btn{
+.field__btn {
     width: 100%;
     height: 50px;
     background: #5B3E96;
