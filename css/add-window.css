@@ -1,0 +1,76 @@
+.todo-add{
+    background: #FFFFFF;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.185434);
+    border-radius: 3px;
+    margin: 30px 20px 150px 20px;
+}
+
+.todo-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.window-title{
+    width: 100%;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    padding-left: 45px;
+    padding-right: 47px;
+}
+
+.field__title{
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    padding-left: 45px;
+    padding-right: 47px;
+}
+
+.field-input{
+    mix-blend-mode: normal;
+    opacity: 0.55;
+    border: none;
+    border-bottom: 1px solid #979797;
+    outline: none;
+    margin-left: 45px;
+    padding-right: 47px;
+    margin-bottom: 45px;
+}
+
+.field__date{
+    display: flex;
+}
+
+.date{
+    width: 55px;
+    padding: 0;
+    margin-left: 45px;
+}
+
+.field-item_color {
+    width: 30px;
+    height: 30px;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    padding-left: 45px;
+    padding-right: 47px;
+    padding-bottom: 30px;
+}
+
+.field__btn{
+    width: 100%;
+    height: 50px;
+    background: #5B3E96;
+    box-shadow: 0 20px 30px rgba(91, 62, 150, 0.4);
+    border: none;
+    outline: none;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}

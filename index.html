@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ToDo</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+
+</head>
+<body style="margin: 0">
+
+<div class="container" id="app">
+    <div class="todo-add" style="display: none">
+        <form action="">
+            <h1 class="window-title">
+                Create New Tasks
+            </h1>
+
+            <h2 class="field__title">
+                Title
+            </h2>
+            <input class="field-input" type="text" placeholder="Write topic">
+
+            <h2 class="field__title">
+                Description
+            </h2>
+            <input class="field-input" type="text" placeholder="Write description">
+
+            <p class="field__date">
+                <input class="field-input date" type="number" placeholder="04"><input class="field-input date"
+                                                                                      type="text"
+                                                                                      placeholder="Feb"><input
+                    class="field-input date" type="number" placeholder="2018">
+            </p>
+            <h2 class="field__title">
+                Notification
+            </h2>
+            <input class="field-input" type="text" placeholder="10 mins before">
+
+            <h2 class="field__title">
+                Choose color
+                <br>
+            </h2>
+            <input class="field-item_color" type="color">
+
+            <br>
+            <button class="field__btn">
+                ADD
+            </button>
+        </form>
+    </div>
+    <div class="todo-container">
+        <div class="todo-list">
+            <div class="todo-element" v-if="status">
+                <button class="todo-item">
+            <span class="item__title">
+                 {{message}}
+            </span>
+                    <span class="item__time">
+                {{time}}
+            </span>
+                </button>
+            </div>
+
+            <div class="todo-element" v-if="status">
+                <button class="todo-item">
+            <span class="item__title">
+                 {{message}}
+            </span>
+                    <span class="item__time">
+                {{time}}
+            </span>
+                </button>
+            </div>
+
+            <div class="todo-element" v-if="status">
+                <button class="todo-item">
+            <span class="item__title">
+                 {{message}}
+            </span>
+                    <span class="item__time">
+                {{time}}
+            </span>
+                </button>
+            </div>
+
+            <div class="todo-element" v-if="status">
+                <button class="todo-item">
+            <span class="item__title">
+                 {{message}}
+            </span>
+                    <span class="item__time">
+                {{time}}
+            </span>
+                </button>
+            </div>
+
+            <div class="todo-element" v-if="status">
+                <button class="todo-item">
+            <span class="item__title">
+                 {{message}}
+            </span>
+                    <span class="item__time">
+                {{time}}
+            </span>
+                </button>
+            </div>
+        </div>
+
+        <button class="add-btn">
+            <img src="img/cross.svg" alt="">
+        </button>
+
+    </div>
+
+    <div class="todo-description" style="display:none;">
+        <form action="">
+            <h2 class="todo-title field__title">
+                <div class="todo-color"></div>
+                <p>
+                    {{message}}
+                </p>
+            </h2>
+
+            <div class="todo-date">
+                <img class="todo-calendar" src="img/calendar.svg" alt="">
+                <p>
+                    {{time}}
+                </p>
+            </div>
+
+            <div class="todo-text">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquid atque delectus distinctio eligendi
+                et fuga magnam quibusdam quod, sequi!
+            </div>
+
+            <div class="todo-checkbox">
+                <label>
+                    <input class="field-input todo-competed" type="checkbox">
+                </label>
+                <p class="checkbox__text">
+                    completed
+                </p>
+            </div>
+
+            <div class="todo-remove">
+
+                <button class="field__btn remove__btn">
+                    <img class="todo-trash-icon" src="img/trashcan.svg" alt="">
+                    Delete
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script src="scripts/script.js"></script>
+</body>
+</html>
