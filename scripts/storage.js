@@ -3,7 +3,6 @@ export class LocalStorage {
     constructor(id, taskName, taskTime, description) {
         this.id = id;
         this.taskName = taskName;
-        this.taskName = taskName;
         this.description = description
     }
 

@@ -15,7 +15,7 @@
 
 <div class="container" id="app">
     <div class="todo-add" id="todo-add" style="display: none">
-        <form action="" style="width: 100%">
+        <form action="" style="width: 100%" @submit.prevent="addTask()">
             <h1 class="window-title">
                 Create New Tasks
             </h1>
@@ -23,29 +23,28 @@
             <h2 class="field__title">
                 Title
             </h2>
-            <input class="field-input" type="text" placeholder="Write topic">
+            <input v-model="newTodoName" class="field-input" type="text" placeholder="Write topic">
 
             <h2 class="field__title">
                 Description
             </h2>
-            <input class="field-input" type="text" placeholder="Write description">
+            <input v-model="newTodoDesc" class="field-input" type="text" placeholder="Write description">
 
             <p class="field__date">
-                <input class="field-input date" type="number" placeholder="04"><input class="field-input date"
-                                                                                      type="text"
-                                                                                      placeholder="Feb"><input
-                    class="field-input date" type="number" placeholder="2018">
+                <input v-model="newTodoDate" class="field-input date" type="number" placeholder="04">
+                <input v-model="newTodoMonth" class="field-input date" type="text" placeholder="Feb">
+                <input v-model="newTodoYear" class="field-input date" type="number" placeholder="2018">
             </p>
             <h2 class="field__title">
                 Notification
             </h2>
-            <input class="field-input" type="text" placeholder="10 mins before">
+            <input v-model="newTodoNotification" class="field-input" type="text" placeholder="10 mins before">
 
             <h2 class="field__title">
                 Choose color
                 <br>
             </h2>
-            <input class="field-item_color" type="color">
+            <input v-model="newTodoColor" class="field-item_color" type="color">
 
             <br>
             <button class="field__btn">
@@ -54,11 +53,11 @@
         </form>
     </div>
     <div class="todo-content" id="todo-content">
-        <div class="todo-list" v-for="item in tasks">
-            <div class="todo-element" v-if="status" v-on:click="openTask()">
-                <button class="todo-item">
+        <div class="todo-list" >
+            <div v-for="(item, index) in tasks" class="todo-element" v-on:click="openTask(index)">
+                <button class="todo-item" >
             <span class="item__title">
-                 {{item.name}}
+               Индекс {{index}}  {{item.name}} {{taskIndex}}
             </span>
                     <span class="item__time">
                 {{item.time}}
@@ -72,26 +71,24 @@
         </button>
 
     </div>
-    <div class="todo-description" id="todo-description" style="display:none;">
-        <a class="overlay" href=""></a>
-        <form action="">
+    <div class="todo-description" id="todo-description" style="display: none">
+        <div style="width: 100%">
             <h2 class="todo-title field__title">
                 <div class="todo-color"></div>
                 <p>
-                    lorem
+
                 </p>
             </h2>
 
             <div class="todo-date">
                 <img class="todo-calendar" src="img/calendar.svg" alt="">
                 <p>
-                    date
+
                 </p>
             </div>
 
             <div class="todo-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquid atque delectus distinctio eligendi
-                et fuga magnam quibusdam quod, sequi!
+
             </div>
 
             <div class="todo-checkbox">
@@ -104,15 +101,13 @@
             </div>
 
             <div class="todo-remove">
-
-                <button class="field__btn remove__btn">
+                <button @click="deleteTask(taskIndex)" class="field__btn remove__btn">
                     <img class="todo-trash-icon" src="img/trashcan.svg" alt="">
                     Delete
                 </button>
             </div>
-        </form>
+        </div>
     </div>
-
 </div>
 
 <script src="scripts/script.js"></script>
