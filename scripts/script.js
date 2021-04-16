@@ -1,63 +1,77 @@
-new Vue({
+Vue.component('task-item', {
+    props: {
+
+    },
+    methods: {}
+});
+
+let app = new Vue({
     el: '#app',
     data: {
+        displayAddWindow: false,
+        displayTask: false,
+
+        NewTodoId: 0,
         newTodoName: '',
         newTodoDate: '',
         newTodoMonth: '',
         newTodoYear: '',
         newTodoDesc: '',
         newTodoNotification: '',
-        newTodoColor: '',
+        newTodoColor: '#000000',
+        newTodoDone: 'false',
 
-        taskIndex: '',
         tasks: [],
-        currentTask: []
+        selectedTask: []
     },
     methods: {
         openNewTaskWindow() {
-            document.getElementById('todo-add').style.display = 'flex'
+            app.displayAddWindow = true;
         },
 
-        openTask(index) {
-
-            document.getElementById('todo-description').style.display = 'flex'
-
-            this.taskIndex = Number.parseInt(index) //приводим таскиндекс к числу
-
-                /*
-            let object = tasks.find(function(elem) {
-                console.log(elem.id)
-                    return elem.id === this.taskIndex // создаем никий объект в который хотим поместить искомый объект из массива
+        openSelectedTask(id, task) {
+            if (this.selectedTask.length !== Number.parseInt('0')) {
+                this.selectedTask = [];
+            }
+            if (this.selectedTask.length === Number.parseInt('0')) {
+                let taskObject = task.find(function (elem) {
+                    return elem.id === id
                 })
-            this.currentTask.push(object) // должны получить в массив текущей таски, элемент поиска
-
-            console.log(tasks)
-            console.log(this.currentTask)
-                 */
+                this.selectedTask.push(taskObject);
+            }
+            app.displayTask = true;
         },
 
 
-        addTask() {
-            if (this.newTodoName !== '') {
-                this.tasks.push({
-
+        addNewTask() {
+            if (app.newTodoName !== '') {
+                app.tasks.push({
+                    id: this.NewTodoId++,
                     name: this.newTodoName,
                     description: this.newTodoDesc,
                     time: this.newTodoDate + ' ' + this.newTodoMonth + ' ' + this.newTodoYear,
                     color: this.newTodoColor,
                     notification: this.newTodoNotification,
-                    done: false,
-
+                    done: this.newTodoDone,
                 });
-
-                document.getElementById('todo-add').style.display = 'none'
-
-            } else alert('Не заполнена задача')
+                app.clearTodoAfterAdding();
+                app.displayAddWindow = false;
+            } else alert('Не заполнен заголовок задачи');
         },
 
-        deleteTask(index) {
-            this.tasks.splice(index, 1);
-            document.getElementById('todo-description').style.display = 'none'
-        }
+        clearTodoAfterAdding() {
+            app.newTodoName = ''
+            app.newTodoDate = ''
+            app.newTodoMonth = ''
+            app.newTodoYear = ''
+            app.newTodoDesc = ''
+            app.newTodoNotification = ''
+            app.newTodoColor = '#000000'
+        },
+
+        deleteTask(id, tasks) {
+            tasks.splice(id, 1);
+            app.displayTask = false;
+        },
     }
 });

@@ -4,7 +4,7 @@
 @import "item-list-windows.css";
 @import "add-window.css";
 
-.container {
+.main-window {
     display: flex;
     flex-direction: column;
     align-items: center;

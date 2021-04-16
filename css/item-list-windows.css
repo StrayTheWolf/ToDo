@@ -21,3 +21,17 @@
 .item__time {
     font-weight: 500 !important;
 }
+
+.item__done{
+    border-radius: 50%;
+    background: #39C4A5;
+    color: #fff;
+    width: 16px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    z-index: 0;
+    position: absolute;
+    margin-top: 17px;
+    margin-left: 20px;
+}

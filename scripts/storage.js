@@ -1,24 +1,23 @@
 export class LocalStorage {
 
-    constructor(id, taskName, taskTime, description) {
-        this.id = id;
-        this.taskName = taskName;
+    constructor(taskName, description, taskTime, notification, color) {
+        this.taskName = taskName
         this.description = description
+        this.taskTime = taskTime
+        this.notification = notification
+        this.color = color
     }
 
-    add(key, value) {
-        localStorage.setItem(key, value)
+    addTask(){
+        if (app.newTodoName !== '') {
+            app.tasks.push({
+                name: app.newTodoName,
+                description: app.newTodoDesc,
+                time: app.newTodoDate + ' ' + app.newTodoMonth + ' ' + app.newTodoYear,
+                color: app.newTodoColor,
+                notification: app.newTodoNotification,
+                done: false,
+            });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(app.tasks));
     }
-
-    get(key) {
-        localStorage.getItem(key)
-    }
-
-    delete(key) {
-        localStorage.removeItem(key)
-    }
-
-    update(key, value) {
-        localStorage.setItem(key, value)
-    }
-}
+}}
