@@ -17,13 +17,25 @@
     align-items: center;
 }
 
+.todo__line{
+    position: relative;
+    top: 33px;
+    width: 50px;
+    margin-right: 12px;
+    border: none;
+    background-color: #979797;
+    height: 1px;
+    opacity: 0.55;
+}
+
 .window-title {
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
     line-height: 28px;
-    padding-left: 45px;
+    padding-left: 30px;
     padding-right: 47px;
+    padding-bottom: 5px;
 }
 
 .todo__title {
@@ -31,8 +43,9 @@
     font-weight: 600;
     font-size: 14px;
     line-height: 16px;
-    padding-left: 45px;
+    padding-left: 30px;
     padding-right: 47px;
+    margin-bottom: 10px;
 }
 
 .todo__input {
@@ -41,8 +54,9 @@
     border: none;
     border-bottom: 1px solid #979797;
     outline: none;
-    margin-left: 45px;
-    padding-right: 47px;
+    margin-left: 30px;
+    padding-right: 90px;
+    padding-bottom: 7px;
     margin-bottom: 45px;
 }
 
@@ -50,9 +64,25 @@
     display: flex;
 }
 
-.date {
-    width: 55px;
-    padding: 0;
+.todo__date_first{
+    width: 15px !important;
+    margin-left: 30px;
+}
+
+.todo__date_last{
+    width: 30px !important;
+}
+
+
+.todo__date {
+    width: 70px;
+    mix-blend-mode: normal;
+    opacity: 0.55;
+    border: none;
+    border-bottom: 1px solid #979797;
+    outline: none;
+    margin-bottom: 35px;
+    margin-right: 62px;
 }
 
 .todo__input_color {
@@ -61,9 +91,7 @@
     outline: none;
     border: none;
     background-color: transparent;
-    padding-left: 45px;
-    padding-right: 47px;
-    padding-bottom: 30px;
+    padding: 0 0 30px 30px;
 }
 
 .todo__addBtn {

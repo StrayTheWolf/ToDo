@@ -1,17 +1,14 @@
-Vue.component('task-item', {
-    props: {
 
-    },
-    methods: {}
-});
 
 let app = new Vue({
     el: '#app',
     data: {
         displayAddWindow: false,
         displayTask: false,
+        newLineThrough: 'none',
+        timeOut: 0,
 
-        NewTodoId: 0,
+        newTodoId: 0,
         newTodoName: '',
         newTodoDate: '',
         newTodoMonth: '',
@@ -22,56 +19,106 @@ let app = new Vue({
         newTodoDone: 'false',
 
         tasks: [],
-        selectedTask: []
+        currentTask: '',
+        newTask: ''
     },
+
+
+    mounted(){ // используем хук жизненого цикла vue для загрузки из storage при загрузке самого vue
+        if (localStorage.getItem('tasks')){
+            try {
+                this.tasks = JSON.parse(localStorage.getItem('tasks'))
+            } catch (e){
+                localStorage.removeItem('tasks')
+            }
+        }
+    },
+
     methods: {
+
+        onClick(index, task) {
+            let idx = index
+            let tsk = task
+            if(!this.timeoutId)
+            {
+                this.timeoutId = setTimeout(() => {
+                    app.openSelectedTask(idx, tsk)
+                }, 50);//tolerance in ms
+            }else{
+                clearTimeout(this.timeoutId);
+                    app.taskDoneSwitch()
+            }
+        },
+
         openNewTaskWindow() {
-            app.displayAddWindow = true;
+            this.displayAddWindow = true;
+            this.displayTask = false;
         },
 
-        openSelectedTask(id, task) {
-            if (this.selectedTask.length !== Number.parseInt('0')) {
-                this.selectedTask = [];
-            }
-            if (this.selectedTask.length === Number.parseInt('0')) {
-                let taskObject = task.find(function (elem) {
-                    return elem.id === id
-                })
-                this.selectedTask.push(taskObject);
-            }
-            app.displayTask = true;
+        openSelectedTask(index, task) {
+            this.currentTask = task[index]
+            this.displayAddWindow = false;
+            this.displayTask = true;
         },
-
 
         addNewTask() {
-            if (app.newTodoName !== '') {
-                app.tasks.push({
-                    id: this.NewTodoId++,
+            this.tasks.push({
+                    id: this.newTodoId += 1,
                     name: this.newTodoName,
                     description: this.newTodoDesc,
                     time: this.newTodoDate + ' ' + this.newTodoMonth + ' ' + this.newTodoYear,
                     color: this.newTodoColor,
                     notification: this.newTodoNotification,
                     done: this.newTodoDone,
+                    lineThrough: this.newLineThrough
                 });
-                app.clearTodoAfterAdding();
-                app.displayAddWindow = false;
-            } else alert('Не заполнен заголовок задачи');
+            this.saveChangesLocal();
+            this.clearTaskAfterAdding();
+            this.displayAddWindow = false;
+            },
+
+        saveChangesLocal(){
+            const parsed = JSON.stringify(this.tasks);
+            localStorage.setItem('tasks',parsed)
         },
 
-        clearTodoAfterAdding() {
-            app.newTodoName = ''
-            app.newTodoDate = ''
-            app.newTodoMonth = ''
-            app.newTodoYear = ''
-            app.newTodoDesc = ''
-            app.newTodoNotification = ''
-            app.newTodoColor = '#000000'
+        clearTaskAfterAdding() {
+            this.newTodoName = ''
+            this.newTodoDate = ''
+            this.newTodoMonth = ''
+            this.newTodoYear = ''
+            this.newTodoDesc = ''
+            this.newTodoNotification = ''
+            this.newTodoColor = '#000000'
         },
 
-        deleteTask(id, tasks) {
-            tasks.splice(id, 1);
-            app.displayTask = false;
+        deleteTask(id) {
+            this.tasks = this.tasks.filter(function (obj){
+                return obj.id !== id
+            })
+
+            this.saveChangesLocal();
+            this.displayTask = false;
         },
+
+        taskDoneSwitch(){
+            if(this.currentTask.done === 'true')
+            {
+                this.currentTask.done = 'false'
+            }
+            else {
+                this.currentTask.done = 'true'
+            }
+            this.lineThroughRender()
+            this.saveChangesLocal()
+        },
+
+        lineThroughRender() {
+            if (this.currentTask.done === 'true') {
+                this.currentTask.lineThrough = 'line-through';
+            } else if (this.currentTask.done === 'false') {
+                this.currentTask.lineThrough = 'none';
+            }
+        }
     }
-});
+})

@@ -10,20 +10,20 @@
 
 .description__title {
     align-items: baseline;
-    display: flex;
+    display: inline-flex;
     font-style: normal;
-    font-weight: 600;+
-    font-size: 18px;
+    font-weight: 600;
     line-height: 21px;
-    padding-left: 45px;
-    padding-right: 47px;
+    padding-left: 80px;
     margin-bottom: 0;
 }
 
 .description__color {
     width: 15px;
     height: 15px;
-    margin-right: 15px;
+    position: absolute;
+    top: 46px;
+    left: 48px;
     border: none;
     border-radius: 50%;
     background: transparent;

@@ -17,14 +17,15 @@
 <div class="main-window" id="app">
     <div class="add-todo" v-show="displayAddWindow">
         <form action="" @submit.prevent="addNewTask()">
+            <hr class="todo__line">
             <h1 class="window-title">
                 Create New Tasks
             </h1>
 
             <h2 class="todo__title">
-                Title
+                Topic
             </h2>
-            <input v-model="newTodoName" class="todo__input" type="text" placeholder="Write topic">
+            <input v-model="newTodoName" class="todo__input" type="text" placeholder="Write topic" required>
 
             <h2 class="todo__title">
                 Description
@@ -32,9 +33,9 @@
             <input v-model="newTodoDesc" class="todo__input" type="text" placeholder="Write description">
 
             <p class="field__date">
-                <input v-model="newTodoDate" class="todo__input date" type="number" placeholder="04">
-                <input v-model="newTodoMonth" class="todo__input date" type="text" placeholder="Feb">
-                <input v-model="newTodoYear" class="todo__input date" type="number" placeholder="2018">
+                <input v-model="newTodoDate" class="todo__date todo__date_first" type="number" placeholder="04">
+                <input v-model="newTodoMonth" class="todo__date" type="text" placeholder="Feb">
+                <input v-model="newTodoYear" class="todo__date todo__date_last" type="number" placeholder="2018">
             </p>
             <h2 class="todo__title">
                 Notification
@@ -54,10 +55,8 @@
         </form>
     </div>
     <div class="list-todo">
-            <div class="todo-element"
-                 v-for="item in tasks"
-                 v-on:click="openSelectedTask(item.id, tasks)">    <!-- передаем айди от  массива выбраного объекта и массив всех                                                                                                                 задач для работы с ними в окне описания-->
-                <div v-if="item.done === 'true'" class="item__done">✓</div>
+            <div class="todo-element" v-for="(item, index) in tasks" v-on:click="openSelectedTask(index, tasks)" >
+                <p class="item__done" v-if="item.done === 'true'">✓</p>
                 <button class="todo-item">
             <span class="item__title">
                 {{item.name}}
@@ -74,36 +73,35 @@
 
     </div>
     <div class="description-todo" v-show="displayTask">
-        <div v-for="item in selectedTask" class="todo-list" style="width: 100%">
+        <div class="todo-list" style="width: 100%">
+
             <h2 class="description__title">
-                <div v-bind:style="{background: item.color}" class="description__color"></div>
-                <p>
-                    {{item.name}}
+                <p v-bind:style="{textDecorationLine: this.currentTask.lineThrough}">
+                    {{currentTask.name}}
+                <div v-bind:style="{ background: currentTask.color }" class="description__color"></div>
                 </p>
             </h2>
 
             <div class="description__date">
                 <img class="description__img" src="img/calendar.svg" alt="">
                 <p>
-                    {{item.time}}
+                    {{currentTask.time}}
                 </p>
             </div>
 
             <p class="description__text">
-                {{item.description}}
+                {{currentTask.description}}
             </p>
 
             <div class="description__checkbox">
-                <label>
-                    <input class="description__completed" type="checkbox">
-                </label>
+                <input type="checkbox" v-on:change="taskDoneSwitch()"  class="description__completed" >
                 <p class="checkbox__text">
                     completed
                 </p>
             </div>
 
             <div class="description__remove">
-                <button @click="deleteTask(item.id, tasks)" class="description__btn">
+                <button @click="deleteTask(currentTask.id)" class="description__btn">
                     <img class="description__removeIcon" src="img/trashcan.svg" alt="">
                     Delete
                 </button>

@@ -1,6 +1,7 @@
-export class LocalStorage {
+export default class LocalStorage {
 
-    constructor(taskName, description, taskTime, notification, color) {
+    constructor(id, name, description, taskTime, notification, color, done) {
+        this.NewTodoId = id
         this.taskName = taskName
         this.description = description
         this.taskTime = taskTime
@@ -9,15 +10,6 @@ export class LocalStorage {
     }
 
     addTask(){
-        if (app.newTodoName !== '') {
-            app.tasks.push({
-                name: app.newTodoName,
-                description: app.newTodoDesc,
-                time: app.newTodoDate + ' ' + app.newTodoMonth + ' ' + app.newTodoYear,
-                color: app.newTodoColor,
-                notification: app.newTodoNotification,
-                done: false,
-            });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(app.tasks));
+
     }
-}}
+}

@@ -7,7 +7,7 @@
     background: #FFFFFF;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.0416667);
     border-radius: 3px;
-    margin-top: 16px;
+    margin-top: 10px;
     margin-bottom: 16px;
     border: none;
     outline: none;
@@ -32,6 +32,6 @@
     justify-content: center;
     z-index: 0;
     position: absolute;
-    margin-top: 17px;
-    margin-left: 20px;
+    margin-top: 27px;
+    margin-left: 10px;
 }
