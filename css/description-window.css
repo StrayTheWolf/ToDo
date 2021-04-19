@@ -52,12 +52,16 @@
     margin: 0 12px 33px 45px;
 }
 
-.description__checkbox {
-    display: flex;
-    align-items: baseline;
+.description__done {
+    margin-left: 70px;
 }
 
-.checkbox__text {
+.item__done_desc{
+    margin-top: 0 !important;
+    margin-left: -25px !important;
+}
+
+.done__text {
     font-style: normal;
     font-weight: bold;
     font-size: 14px;

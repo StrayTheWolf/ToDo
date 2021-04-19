@@ -93,9 +93,9 @@
                 {{currentTask.description}}
             </p>
 
-            <div class="description__checkbox">
-                <input type="checkbox" v-on:change="taskDoneSwitch()"  class="description__completed" >
-                <p class="checkbox__text">
+            <div class="description__done">
+                <p class="item__done item__done_desc" v-if="currentTask.done === 'true'">✓</p>
+                <p  v-on:click="taskDoneSwitch()"  class="done__text">
                     completed
                 </p>
             </div>
