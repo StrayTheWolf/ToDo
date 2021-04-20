@@ -9,7 +9,7 @@ export default class LocalStorage {
         this.color = color
     }
 
-    addTask(){
+    addTask() {
 
     }
 }

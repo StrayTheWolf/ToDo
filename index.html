@@ -14,7 +14,7 @@
 </head>
 <body style="margin: 0">
 
-<div class="main-window" id="app">
+<div v-bind:style="{filter: this.blur}" class="main-window" id="app">
     <div class="add-todo" v-show="displayAddWindow">
         <form action="" @submit.prevent="addNewTask()">
             <hr class="todo__line">
@@ -54,21 +54,22 @@
             </button>
         </form>
     </div>
-    <div class="list-todo">
-            <div class="todo-element" v-for="(item, index) in tasks" v-on:click="openSelectedTask(index, tasks)" >
-                <p class="item__done" v-if="item.done === 'true'">✓</p>
-                <button class="todo-item">
+    <div class="list-todo" v-show="displayList">
+        <p class="all-done" v-if="tasks.length === 0">All tasks done ! Add new one</p>
+        <div class="todo-element" v-for="(item, index) in tasks" v-on:click="openSelectedTask(index, tasks)">
+            <p class="item__done" v-if="item.done === 'true'">✓</p>
+            <button class="todo-item">
             <span class="item__title">
                 {{item.name}}
             </span>
-                    <span class="item__time">
+                <span class="item__time">
                 {{item.time}}
             </span>
-                </button>
-            </div>
+            </button>
+        </div>
 
-        <button class="add-btn" @click="openNewTaskWindow()" id="addWindow">
-            <img src="img/cross.svg" alt="">
+        <button class="add-btn" @click="[openNewTaskWindow()]" id="addWindow">
+            <img class="add__img" src="img/cross.svg" alt="">
         </button>
 
     </div>
@@ -95,8 +96,9 @@
 
             <div class="description__done">
                 <p class="item__done item__done_desc" v-if="currentTask.done === 'true'">✓</p>
-                <p  v-on:click="taskDoneSwitch()"  class="done__text">
-                    completed
+                <p class="item__done item__undone_desc" v-else>X</p>
+                <p class="done__text" v-on:click="taskDoneSwitch()">
+                    Click here to check/uncheck done task
                 </p>
             </div>
 

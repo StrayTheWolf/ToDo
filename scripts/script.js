@@ -1,12 +1,12 @@
-
-
 let app = new Vue({
     el: '#app',
     data: {
         displayAddWindow: false,
         displayTask: false,
+        displayList: true,
+
         newLineThrough: 'none',
-        timeOut: 0,
+        blur: 'blur(0px)',
 
         newTodoId: 0,
         newTodoName: '',
@@ -23,63 +23,48 @@ let app = new Vue({
         newTask: ''
     },
 
-
-    mounted(){ // используем хук жизненого цикла vue для загрузки из storage при загрузке самого vue
-        if (localStorage.getItem('tasks')){
+    mounted() { // используем хук жизненого цикла vue для загрузки из storage при загрузке самого vue
+        if (localStorage.getItem('tasks')) {
             try {
                 this.tasks = JSON.parse(localStorage.getItem('tasks'))
-            } catch (e){
+            } catch (e) {
                 localStorage.removeItem('tasks')
             }
         }
     },
 
     methods: {
-
-        onClick(index, task) {
-            let idx = index
-            let tsk = task
-            if(!this.timeoutId)
-            {
-                this.timeoutId = setTimeout(() => {
-                    app.openSelectedTask(idx, tsk)
-                }, 50);//tolerance in ms
-            }else{
-                clearTimeout(this.timeoutId);
-                    app.taskDoneSwitch()
-            }
-        },
-
         openNewTaskWindow() {
             this.displayAddWindow = true;
             this.displayTask = false;
+            this.displayList = false;
         },
 
         openSelectedTask(index, task) {
             this.currentTask = task[index]
-            this.displayAddWindow = false;
             this.displayTask = true;
         },
 
         addNewTask() {
             this.tasks.push({
-                    id: this.newTodoId += 1,
-                    name: this.newTodoName,
-                    description: this.newTodoDesc,
-                    time: this.newTodoDate + ' ' + this.newTodoMonth + ' ' + this.newTodoYear,
-                    color: this.newTodoColor,
-                    notification: this.newTodoNotification,
-                    done: this.newTodoDone,
-                    lineThrough: this.newLineThrough
-                });
+                id: this.newTodoId += 1,
+                name: this.newTodoName,
+                description: this.newTodoDesc,
+                time: this.newTodoDate + ' ' + this.newTodoMonth + ' ' + this.newTodoYear,
+                color: this.newTodoColor,
+                notification: this.newTodoNotification,
+                done: this.newTodoDone,
+                lineThrough: this.newLineThrough
+            });
             this.saveChangesLocal();
             this.clearTaskAfterAdding();
             this.displayAddWindow = false;
-            },
+            this.displayList = true;
+        },
 
-        saveChangesLocal(){
+        saveChangesLocal() {
             const parsed = JSON.stringify(this.tasks);
-            localStorage.setItem('tasks',parsed)
+            localStorage.setItem('tasks', parsed)
         },
 
         clearTaskAfterAdding() {
@@ -93,20 +78,18 @@ let app = new Vue({
         },
 
         deleteTask(id) {
-            this.tasks = this.tasks.filter(function (obj){
+            this.tasks = this.tasks.filter(function (obj) {
                 return obj.id !== id
-            })
-
+            });
+            this.currentTask = '';
             this.saveChangesLocal();
             this.displayTask = false;
         },
 
-        taskDoneSwitch(){
-            if(this.currentTask.done === 'true')
-            {
+        taskDoneSwitch() {
+            if (this.currentTask.done === 'true') {
                 this.currentTask.done = 'false'
-            }
-            else {
+            } else {
                 this.currentTask.done = 'true'
             }
             this.lineThroughRender()
@@ -118,6 +101,14 @@ let app = new Vue({
                 this.currentTask.lineThrough = 'line-through';
             } else if (this.currentTask.done === 'false') {
                 this.currentTask.lineThrough = 'none';
+            }
+        },
+
+        blurOn() {
+            if (this.blur === 'blur(0px)') {
+                this.blur = 'blur(5px)'
+            } else {
+                this.blur = 'blur(0px)'
             }
         }
     }

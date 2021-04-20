@@ -56,9 +56,16 @@
     margin-left: 70px;
 }
 
-.item__done_desc{
+.item__done_desc {
     margin-top: 0 !important;
     margin-left: -25px !important;
+}
+
+.item__undone_desc {
+    height: 16px;
+    margin-top: 0 !important;
+    margin-left: -25px !important;
+    background: red !important;
 }
 
 .done__text {

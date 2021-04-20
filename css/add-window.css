@@ -1,7 +1,5 @@
 .add-todo {
     width: 85vw;
-    position: absolute;
-    z-index: 2;
     background: #FFFFFF;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.185434);
     border-radius: 3px;
@@ -9,7 +7,6 @@
 }
 
 .list-todo {
-    z-index: 1;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -17,7 +14,11 @@
     align-items: center;
 }
 
-.todo__line{
+.todo-element {
+
+}
+
+.todo__line {
     position: relative;
     top: 33px;
     width: 50px;
@@ -64,12 +65,12 @@
     display: flex;
 }
 
-.todo__date_first{
+.todo__date_first {
     width: 15px !important;
     margin-left: 30px;
 }
 
-.todo__date_last{
+.todo__date_last {
     width: 30px !important;
 }
 
@@ -103,4 +104,9 @@
     outline: none;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
+}
+
+.all-done {
+    font-size: 24px;
+    color: #FFFFFF;
 }
