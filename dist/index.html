@@ -69,7 +69,7 @@
         </div>
 
         <button class="add-btn" @click="[openNewTaskWindow()]" id="addWindow">
-            <img class="add__img" src="img/cross.svg" alt="">
+            <img class="add__img" src="images/cross.svg" alt="">
         </button>
 
     </div>
@@ -84,7 +84,7 @@
             </h2>
 
             <div class="description__date">
-                <img class="description__img" src="img/calendar.svg" alt="">
+                <img class="description__img" src="images/calendar.svg" alt="">
                 <p>
                     {{currentTask.time}}
                 </p>
@@ -96,15 +96,15 @@
 
             <div class="description__done">
                 <p class="item__done item__done_desc" v-if="currentTask.done === 'true'">✓</p>
-                <p class="item__done item__undone_desc" v-else>X</p>
+                <p class="item__done item__undone_desc" v-else>✖</p>
                 <p class="done__text" v-on:click="taskDoneSwitch()">
                     Click here to check/uncheck done task
                 </p>
             </div>
 
             <div class="description__remove">
-                <button @click="deleteTask(currentTask.id)" class="description__btn">
-                    <img class="description__removeIcon" src="img/trashcan.svg" alt="">
+                <img class="description__removeIcon" src="images/trashcan.svg" alt="">
+                <button @click="deleteTask(currentTask.id, currentTask.done)" class="description__btn">
                     Delete
                 </button>
             </div>
@@ -112,6 +112,8 @@
     </div>
 </div>
 
-<script src="scripts/script.js"></script>
+<script type="module" src="scripts/storage-dist.js"></script>
+<script src="scripts/script-dist.js"></script>
+
 </body>
 </html>

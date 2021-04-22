@@ -18,5 +18,9 @@
   "homepage": "https://github.com/StrayTheWolf/todo#readme",
   "dependencies": {
     "vue-clickaway": "^2.2.2"
+  },
+  "devDependencies": {
+    "laravel-mix": "^6.0.18",
+    "postcss": "^8.1.14"
   }
 }

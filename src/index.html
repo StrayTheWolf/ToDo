@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ToDo</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+
+</head>
+<body style="margin: 0">
+
+<div v-bind:style="{filter: this.blur}" class="main-window" id="app">
+    <div class="add-todo" v-show="displayAddWindow">
+        <form action="" @submit.prevent="addNewTask()">
+            <hr class="todo__line">
+            <h1 class="window-title">
+                Create New Tasks
+            </h1>
+
+            <h2 class="todo__title">
+                Topic
+            </h2>
+            <input v-model="newTodoName" class="todo__input" type="text" placeholder="Write topic" required>
+
+            <h2 class="todo__title">
+                Description
+            </h2>
+            <input v-model="newTodoDesc" class="todo__input" type="text" placeholder="Write description">
+
+            <p class="field__date">
+                <input v-model="newTodoDate" class="todo__date todo__date_first" type="number" placeholder="04">
+                <input v-model="newTodoMonth" class="todo__date" type="text" placeholder="Feb">
+                <input v-model="newTodoYear" class="todo__date todo__date_last" type="number" placeholder="2018">
+            </p>
+            <h2 class="todo__title">
+                Notification
+            </h2>
+            <input v-model="newTodoNotification" class="todo__input" type="text" placeholder="10 min before">
+
+            <h2 class="todo__title">
+                Choose color
+                <br>
+            </h2>
+            <input v-model="newTodoColor" class="todo__input_color" type="color">
+
+            <br>
+            <button class="todo__addBtn">
+                ADD
+            </button>
+        </form>
+    </div>
+    <div class="list-todo" v-show="displayList">
+        <p class="all-done" v-if="tasks.length === 0">All tasks done ! Add new one</p>
+        <div class="todo-element" v-for="(item, index) in tasks" v-on:click="openSelectedTask(index, tasks)">
+            <p class="item__done" v-if="item.done === 'true'">✓</p>
+            <button class="todo-item">
+            <span class="item__title">
+                {{item.name}}
+            </span>
+                <span class="item__time">
+                {{item.time}}
+            </span>
+            </button>
+        </div>
+
+        <button class="add-btn" @click="[openNewTaskWindow()]" id="addWindow">
+            <img class="add__img" src="images/cross.svg" alt="">
+        </button>
+
+    </div>
+    <div class="description-todo" v-show="displayTask">
+        <div class="todo-list" style="width: 100%">
+
+            <h2 class="description__title">
+                <p v-bind:style="{textDecorationLine: this.currentTask.lineThrough}">
+                    {{currentTask.name}}
+                <div v-bind:style="{ background: currentTask.color }" class="description__color"></div>
+                </p>
+            </h2>
+
+            <div class="description__date">
+                <img class="description__img" src="images/calendar.svg" alt="">
+                <p>
+                    {{currentTask.time}}
+                </p>
+            </div>
+
+            <p class="description__text">
+                {{currentTask.description}}
+            </p>
+
+            <div class="description__done">
+                <p class="item__done item__done_desc" v-if="currentTask.done === 'true'">✓</p>
+                <p class="item__done item__undone_desc" v-else>✖</p>
+                <p class="done__text" v-on:click="taskDoneSwitch()">
+                    Click here to check/uncheck done task
+                </p>
+            </div>
+
+            <div class="description__remove">
+                <img class="description__removeIcon" src="images/trashcan.svg" alt="">
+                <button @click="deleteTask(currentTask.id, currentTask.done)" class="description__btn">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="scripts/storage-dist.js"></script>
+<script src="scripts/script-dist.js"></script>
+
+</body>
+</html>

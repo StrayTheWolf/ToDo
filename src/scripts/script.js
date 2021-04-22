@@ -1,9 +1,13 @@
-let app = new Vue({
+import {LocalStorage} from "./storage";
+
+new Vue({
     el: '#app',
+
     data: {
         displayAddWindow: false,
         displayTask: false,
         displayList: true,
+        displayIsDone: false,
 
         newLineThrough: 'none',
         blur: 'blur(0px)',
@@ -20,7 +24,7 @@ let app = new Vue({
 
         tasks: [],
         currentTask: '',
-        newTask: ''
+        newTask: '',
     },
 
     mounted() { // используем хук жизненого цикла vue для загрузки из storage при загрузке самого vue
@@ -77,13 +81,18 @@ let app = new Vue({
             this.newTodoColor = '#000000'
         },
 
-        deleteTask(id) {
-            this.tasks = this.tasks.filter(function (obj) {
-                return obj.id !== id
-            });
-            this.currentTask = '';
-            this.saveChangesLocal();
-            this.displayTask = false;
+        deleteTask(id, done) {
+            if (done === 'true'){
+                this.tasks = this.tasks.filter(function (obj) {
+                    return obj.id !== id
+                });
+                this.currentTask = '';
+                this.saveChangesLocal();
+                this.displayTask = false;
+            }
+            else {
+                alert('Mark task done to remove it')
+            }
         },
 
         taskDoneSwitch() {
