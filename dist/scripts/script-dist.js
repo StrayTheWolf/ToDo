@@ -1,5 +1,4 @@
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/scripts/script.js":
@@ -8,19 +7,26 @@
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./storage */ "./src/scripts/storage.js");
+/* harmony import */ var vue_click_outside__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-click-outside */ "./node_modules/vue-click-outside/index.js");
+/* harmony import */ var vue_click_outside__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_click_outside__WEBPACK_IMPORTED_MODULE_1__);
+
 
 new Vue({
   el: '#app',
+  directives: {
+    ClickOutside: (vue_click_outside__WEBPACK_IMPORTED_MODULE_1___default())
+  },
   data: {
+    storage: new _storage__WEBPACK_IMPORTED_MODULE_0__.Storage(),
     displayAddWindow: false,
     displayTask: false,
     displayList: true,
     displayIsDone: false,
     newLineThrough: 'none',
     blur: 'blur(0px)',
-    newTodoId: 0,
     newTodoName: '',
     newTodoDate: '',
     newTodoMonth: '',
@@ -28,26 +34,44 @@ new Vue({
     newTodoDesc: '',
     newTodoNotification: '',
     newTodoColor: '#000000',
-    newTodoDone: 'false',
+    newTodoDone: false,
+    lastId: function lastId() {
+      // получаем id последнего объекта из массива и даем новому объекту id + 1 от последнего
+      if (this.tasks.length !== 0) {
+        var arr = this.tasks[this.tasks.length - 1];
+        return arr.id + 1;
+      } else {
+        return 0;
+      }
+    },
     tasks: [],
     currentTask: '',
-    newTask: ''
+    openedAdd: false,
+    openedList: true
   },
   mounted: function mounted() {
     // используем хук жизненого цикла vue для загрузки из storage при загрузке самого vue
+
+    /*
     if (localStorage.getItem('tasks')) {
-      try {
-        this.tasks = JSON.parse(localStorage.getItem('tasks'));
-      } catch (e) {
-        localStorage.removeItem('tasks');
-      }
+    try {
+        this.tasks = JSON.parse(localStorage.getItem('tasks'))
+    } catch (e) {
+        localStorage.removeItem('tasks')
     }
+    }
+       */
+    this.tasks = this.storage.get(this.tasks);
   },
   methods: {
     openNewTaskWindow: function openNewTaskWindow() {
-      this.displayAddWindow = true;
       this.displayTask = false;
       this.displayList = false;
+    },
+    openCloseListItems: function openCloseListItems() {
+      if (this.displayList === true) {
+        this.displayList = false;
+      } else this.displayList = true;
     },
     openSelectedTask: function openSelectedTask(index, task) {
       this.currentTask = task[index];
@@ -55,7 +79,7 @@ new Vue({
     },
     addNewTask: function addNewTask() {
       this.tasks.push({
-        id: this.newTodoId += 1,
+        id: this.lastId(),
         name: this.newTodoName,
         description: this.newTodoDesc,
         time: this.newTodoDate + ' ' + this.newTodoMonth + ' ' + this.newTodoYear,
@@ -64,14 +88,27 @@ new Vue({
         done: this.newTodoDone,
         lineThrough: this.newLineThrough
       });
-      this.saveChangesLocal();
+      this.storage.update(this.tasks);
       this.clearTaskAfterAdding();
-      this.displayAddWindow = false;
-      this.displayList = true;
     },
-    saveChangesLocal: function saveChangesLocal() {
-      var parsed = JSON.stringify(this.tasks);
-      localStorage.setItem('tasks', parsed);
+
+    /*
+    saveChangesLocal() {
+        const parsed = JSON.stringify(this.tasks);
+        localStorage.setItem('tasks', parsed)
+    },
+     */
+    deleteTask: function deleteTask(id, done) {
+      if (done === true) {
+        this.tasks = this.tasks.filter(function (obj) {
+          return obj.id !== id;
+        });
+        this.currentTask = '';
+        this.storage.update(this.tasks);
+        this.displayTask = false;
+      } else {
+        alert('Mark task done to remove it');
+      }
     },
     clearTaskAfterAdding: function clearTaskAfterAdding() {
       this.newTodoName = '';
@@ -82,41 +119,31 @@ new Vue({
       this.newTodoNotification = '';
       this.newTodoColor = '#000000';
     },
-    deleteTask: function deleteTask(id, done) {
-      if (done === 'true') {
-        this.tasks = this.tasks.filter(function (obj) {
-          return obj.id !== id;
-        });
-        this.currentTask = '';
-        this.saveChangesLocal();
-        this.displayTask = false;
-      } else {
-        alert('Mark task done to remove it');
-      }
-    },
     taskDoneSwitch: function taskDoneSwitch() {
-      if (this.currentTask.done === 'true') {
-        this.currentTask.done = 'false';
-      } else {
-        this.currentTask.done = 'true';
-      }
-
+      this.currentTask.done = this.currentTask.done !== true;
       this.lineThroughRender();
-      this.saveChangesLocal();
+      this.storage.update(this.tasks);
     },
     lineThroughRender: function lineThroughRender() {
-      if (this.currentTask.done === 'true') {
+      if (this.currentTask.done === true) {
         this.currentTask.lineThrough = 'line-through';
-      } else if (this.currentTask.done === 'false') {
+      } else if (this.currentTask.done === false) {
         this.currentTask.lineThrough = 'none';
       }
     },
-    blurOn: function blurOn() {
+    blurSwitch: function blurSwitch() {
       if (this.blur === 'blur(0px)') {
         this.blur = 'blur(5px)';
       } else {
         this.blur = 'blur(0px)';
       }
+    },
+    // Open close outside div window methods by ClickOutside directive
+    toggle: function toggle() {
+      this.openedAdd = true;
+    },
+    hide: function hide() {
+      this.openedAdd = false;
     }
   }
 });
@@ -129,9 +156,10 @@ new Vue({
   \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "LocalStorage": () => (/* binding */ LocalStorage)
+/* harmony export */   "Storage": () => (/* binding */ Storage)
 /* harmony export */ });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -139,25 +167,31 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var LocalStorage = /*#__PURE__*/function () {
-  function LocalStorage(id, name, description, taskTime, notification, color, done) {
-    _classCallCheck(this, LocalStorage);
-
-    this.NewTodoId = id;
-    this.taskName = name;
-    this.description = description;
-    this.taskTime = taskTime;
-    this.notification = notification;
-    this.color = color;
-    this.done = done;
+var Storage = /*#__PURE__*/function () {
+  function Storage() {
+    _classCallCheck(this, Storage);
   }
 
-  _createClass(LocalStorage, [{
-    key: "addTask",
-    value: function addTask() {}
+  _createClass(Storage, [{
+    key: "get",
+    value: function get(tasks) {
+      tasks = JSON.parse(localStorage.getItem('tasks'));
+      return tasks;
+    }
+  }, {
+    key: "update",
+    value: function update(tasks) {
+      var parsed = JSON.stringify(tasks);
+      localStorage.setItem('tasks', parsed);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(key) {
+      localStorage.removeItem(key);
+    }
   }]);
 
-  return LocalStorage;
+  return Storage;
 }();
 
 /***/ }),
@@ -168,8 +202,89 @@ var LocalStorage = /*#__PURE__*/function () {
   \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-click-outside/index.js":
+/*!*************************************************!*\
+  !*** ./node_modules/vue-click-outside/index.js ***!
+  \*************************************************/
+/***/ ((module, exports) => {
+
+function validate(binding) {
+  if (typeof binding.value !== 'function') {
+    console.warn('[Vue-click-outside:] provided expression', binding.expression, 'is not a function.')
+    return false
+  }
+
+  return true
+}
+
+function isPopup(popupItem, elements) {
+  if (!popupItem || !elements)
+    return false
+
+  for (var i = 0, len = elements.length; i < len; i++) {
+    try {
+      if (popupItem.contains(elements[i])) {
+        return true
+      }
+      if (elements[i].contains(popupItem)) {
+        return false
+      }
+    } catch(e) {
+      return false
+    }
+  }
+
+  return false
+}
+
+function isServer(vNode) {
+  return typeof vNode.componentInstance !== 'undefined' && vNode.componentInstance.$isServer
+}
+
+exports = module.exports = {
+  bind: function (el, binding, vNode) {
+    if (!validate(binding)) return
+
+    // Define Handler and cache it on the element
+    function handler(e) {
+      if (!vNode.context) return
+
+      // some components may have related popup item, on which we shall prevent the click outside event handler.
+      var elements = e.path || (e.composedPath && e.composedPath())
+      elements && elements.length > 0 && elements.unshift(e.target)
+
+      if (el.contains(e.target) || isPopup(vNode.context.popupItem, elements)) return
+
+      el.__vueClickOutside__.callback(e)
+    }
+
+    // add Event Listeners
+    el.__vueClickOutside__ = {
+      handler: handler,
+      callback: binding.value
+    }
+    const clickHandler = 'ontouchstart' in document.documentElement ? 'touchstart' : 'click';
+    !isServer(vNode) && document.addEventListener(clickHandler, handler)
+  },
+
+  update: function (el, binding) {
+    if (validate(binding)) el.__vueClickOutside__.callback = binding.value
+  },
+
+  unbind: function (el, binding, vNode) {
+    // Remove Event Listeners
+    const clickHandler = 'ontouchstart' in document.documentElement ? 'touchstart' : 'click';
+    !isServer(vNode) && el.__vueClickOutside__ && document.removeEventListener(clickHandler, el.__vueClickOutside__.handler)
+    delete el.__vueClickOutside__
+  }
+}
 
 
 /***/ })
@@ -232,6 +347,18 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 				}
 /******/ 			}
 /******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
 /******/ 		};
 /******/ 	})();
 /******/ 	

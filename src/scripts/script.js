@@ -1,9 +1,17 @@
-import {LocalStorage} from "./storage";
+import {Storage} from "./storage";
+import ClickOutside from "vue-click-outside"
+
 
 new Vue({
     el: '#app',
 
+    directives:{
+      ClickOutside
+    },
+
     data: {
+        storage: new Storage(),
+
         displayAddWindow: false,
         displayTask: false,
         displayList: true,
@@ -12,7 +20,6 @@ new Vue({
         newLineThrough: 'none',
         blur: 'blur(0px)',
 
-        newTodoId: 0,
         newTodoName: '',
         newTodoDate: '',
         newTodoMonth: '',
@@ -20,14 +27,26 @@ new Vue({
         newTodoDesc: '',
         newTodoNotification: '',
         newTodoColor: '#000000',
-        newTodoDone: 'false',
+        newTodoDone: false,
+        lastId: function (){ // получаем id последнего объекта из массива и даем новому объекту id + 1 от последнего
+            if (this.tasks.length !== 0){
+                let arr = this.tasks[this.tasks.length - 1]
+                return arr.id + 1
+            }
+            else {
+                return 0
+            }
+        },
 
         tasks: [],
         currentTask: '',
-        newTask: '',
+
+        openedAdd: false,
+        openedList: true
     },
 
     mounted() { // используем хук жизненого цикла vue для загрузки из storage при загрузке самого vue
+            /*
         if (localStorage.getItem('tasks')) {
             try {
                 this.tasks = JSON.parse(localStorage.getItem('tasks'))
@@ -35,13 +54,23 @@ new Vue({
                 localStorage.removeItem('tasks')
             }
         }
+
+             */
+        this.tasks = this.storage.get(this.tasks)
     },
 
     methods: {
         openNewTaskWindow() {
-            this.displayAddWindow = true;
+
             this.displayTask = false;
             this.displayList = false;
+        },
+
+        openCloseListItems() {
+            if (this.displayList === true){
+                this.displayList = false
+            }
+            else this.displayList = true;
         },
 
         openSelectedTask(index, task) {
@@ -51,7 +80,7 @@ new Vue({
 
         addNewTask() {
             this.tasks.push({
-                id: this.newTodoId += 1,
+                id: this.lastId(),
                 name: this.newTodoName,
                 description: this.newTodoDesc,
                 time: this.newTodoDate + ' ' + this.newTodoMonth + ' ' + this.newTodoYear,
@@ -60,15 +89,29 @@ new Vue({
                 done: this.newTodoDone,
                 lineThrough: this.newLineThrough
             });
-            this.saveChangesLocal();
+            this.storage.update(this.tasks);
             this.clearTaskAfterAdding();
-            this.displayAddWindow = false;
-            this.displayList = true;
         },
 
+        /*
         saveChangesLocal() {
             const parsed = JSON.stringify(this.tasks);
             localStorage.setItem('tasks', parsed)
+        },
+         */
+
+        deleteTask(id, done) {
+            if (done === true){
+                this.tasks = this.tasks.filter(function (obj) {
+                    return obj.id !== id
+                });
+                this.currentTask = '';
+                this.storage.update(this.tasks);
+                this.displayTask = false;
+            }
+            else {
+                alert('Mark task done to remove it')
+            }
         },
 
         clearTaskAfterAdding() {
@@ -81,44 +124,35 @@ new Vue({
             this.newTodoColor = '#000000'
         },
 
-        deleteTask(id, done) {
-            if (done === 'true'){
-                this.tasks = this.tasks.filter(function (obj) {
-                    return obj.id !== id
-                });
-                this.currentTask = '';
-                this.saveChangesLocal();
-                this.displayTask = false;
-            }
-            else {
-                alert('Mark task done to remove it')
-            }
-        },
-
         taskDoneSwitch() {
-            if (this.currentTask.done === 'true') {
-                this.currentTask.done = 'false'
-            } else {
-                this.currentTask.done = 'true'
-            }
+            this.currentTask.done = this.currentTask.done !== true;
             this.lineThroughRender()
-            this.saveChangesLocal()
+            this.storage.update(this.tasks);
         },
 
         lineThroughRender() {
-            if (this.currentTask.done === 'true') {
+            if (this.currentTask.done === true) {
                 this.currentTask.lineThrough = 'line-through';
-            } else if (this.currentTask.done === 'false') {
+            } else if (this.currentTask.done === false) {
                 this.currentTask.lineThrough = 'none';
             }
         },
 
-        blurOn() {
+        blurSwitch() {
             if (this.blur === 'blur(0px)') {
                 this.blur = 'blur(5px)'
             } else {
                 this.blur = 'blur(0px)'
             }
+        },
+
+        // Open close outside div window methods by ClickOutside directive
+        toggle(){
+            this.openedAdd = true;
+        },
+
+        hide(){
+            this.openedAdd = false;
         }
     }
 })

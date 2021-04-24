@@ -39,7 +39,7 @@ var __webpack_exports__ = {};
   \********************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "LocalStorage": () => (/* binding */ LocalStorage)
+/* harmony export */   "Storage": () => (/* binding */ Storage)
 /* harmony export */ });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -47,25 +47,31 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var LocalStorage = /*#__PURE__*/function () {
-  function LocalStorage(id, name, description, taskTime, notification, color, done) {
-    _classCallCheck(this, LocalStorage);
-
-    this.NewTodoId = id;
-    this.taskName = name;
-    this.description = description;
-    this.taskTime = taskTime;
-    this.notification = notification;
-    this.color = color;
-    this.done = done;
+var Storage = /*#__PURE__*/function () {
+  function Storage() {
+    _classCallCheck(this, Storage);
   }
 
-  _createClass(LocalStorage, [{
-    key: "addTask",
-    value: function addTask() {}
+  _createClass(Storage, [{
+    key: "get",
+    value: function get(tasks) {
+      tasks = JSON.parse(localStorage.getItem('tasks'));
+      return tasks;
+    }
+  }, {
+    key: "update",
+    value: function update(tasks) {
+      var parsed = JSON.stringify(tasks);
+      localStorage.setItem('tasks', parsed);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(key) {
+      localStorage.removeItem(key);
+    }
   }]);
 
-  return LocalStorage;
+  return Storage;
 }();
 /******/ })()
 ;

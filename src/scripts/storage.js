@@ -1,16 +1,16 @@
-export class LocalStorage {
+export class Storage {
 
-    constructor(id, name, description, taskTime, notification, color, done) {
-        this.NewTodoId = id
-        this.taskName = name
-        this.description = description
-        this.taskTime = taskTime
-        this.notification = notification
-        this.color = color
-        this.done = done
+    get(tasks) {
+        tasks = JSON.parse( localStorage.getItem('tasks'))
+        return tasks
     }
 
-    addTask(){
+    update(tasks) {
+        const parsed = JSON.stringify(tasks);
+        localStorage.setItem('tasks', parsed)
+    }
 
+    delete(key) {
+        localStorage.removeItem(key)
     }
 }
