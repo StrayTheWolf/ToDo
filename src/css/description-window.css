@@ -1,11 +1,13 @@
 .description-todo {
-    z-index: 2;
     position: absolute;
-    background: #FFFFFF;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.185434);
+}
+
+.description-content{
+    width: 85%;
+    margin-left: 30px;
+    background: #fff;
     border-radius: 3px;
-    width: 85vw;
-    margin-top: 120px;
+    margin-top: 155px;
 }
 
 .description__title {
@@ -22,9 +24,8 @@
 .description__color {
     width: 15px;
     height: 15px;
-    position: absolute;
-    top: 30px;
-    left: 25px;
+    position: relative;
+    right: 30px;
     border: none;
     border-radius: 50%;
     background: transparent;
@@ -79,6 +80,7 @@
 }
 
 .description__removeIcon {
+    fill: #FFFFFF;
     position: relative;
     top: 37px;
     left: 110px;

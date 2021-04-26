@@ -35,3 +35,8 @@
     margin-top: 27px;
     margin-left: 10px;
 }
+
+.item__undone_list{
+    height: 16px;
+    background: red !important;
+}

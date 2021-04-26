@@ -1,23 +1,16 @@
 import {Storage} from "./storage";
 import ClickOutside from "vue-click-outside"
 
-
 new Vue({
     el: '#app',
 
-    directives:{
-      ClickOutside
+    directives: {
+        ClickOutside
     },
 
     data: {
         storage: new Storage(),
 
-        displayAddWindow: false,
-        displayTask: false,
-        displayList: true,
-        displayIsDone: false,
-
-        newLineThrough: 'none',
         blur: 'blur(0px)',
 
         newTodoName: '',
@@ -28,54 +21,30 @@ new Vue({
         newTodoNotification: '',
         newTodoColor: '#000000',
         newTodoDone: false,
-        lastId: function (){ // получаем id последнего объекта из массива и даем новому объекту id + 1 от последнего
-            if (this.tasks.length !== 0){
+        lastId: function () { // получаем id последнего объекта из массива и даем новому объекту id + 1 от последнего
+            if (this.tasks.length !== 0) {
                 let arr = this.tasks[this.tasks.length - 1]
                 return arr.id + 1
-            }
-            else {
+            } else {
                 return 0
             }
         },
-
         tasks: [],
         currentTask: '',
 
         openedAdd: false,
-        openedList: true
+        openedDesc: false
     },
 
     mounted() { // используем хук жизненого цикла vue для загрузки из storage при загрузке самого vue
-            /*
-        if (localStorage.getItem('tasks')) {
-            try {
-                this.tasks = JSON.parse(localStorage.getItem('tasks'))
-            } catch (e) {
-                localStorage.removeItem('tasks')
-            }
-        }
-
-             */
         this.tasks = this.storage.get(this.tasks)
     },
 
     methods: {
-        openNewTaskWindow() {
-
-            this.displayTask = false;
-            this.displayList = false;
-        },
-
-        openCloseListItems() {
-            if (this.displayList === true){
-                this.displayList = false
-            }
-            else this.displayList = true;
-        },
-
         openSelectedTask(index, task) {
             this.currentTask = task[index]
-            this.displayTask = true;
+            this.toggleDesc()
+            this.blurSwitchOn()
         },
 
         addNewTask() {
@@ -87,29 +56,20 @@ new Vue({
                 color: this.newTodoColor,
                 notification: this.newTodoNotification,
                 done: this.newTodoDone,
-                lineThrough: this.newLineThrough
             });
             this.storage.update(this.tasks);
             this.clearTaskAfterAdding();
         },
 
-        /*
-        saveChangesLocal() {
-            const parsed = JSON.stringify(this.tasks);
-            localStorage.setItem('tasks', parsed)
-        },
-         */
-
         deleteTask(id, done) {
-            if (done === true){
+            if (done === true) {
                 this.tasks = this.tasks.filter(function (obj) {
                     return obj.id !== id
                 });
                 this.currentTask = '';
                 this.storage.update(this.tasks);
-                this.displayTask = false;
-            }
-            else {
+                this.hideDesc()
+            } else {
                 alert('Mark task done to remove it')
             }
         },
@@ -124,12 +84,15 @@ new Vue({
             this.newTodoColor = '#000000'
         },
 
+        // переключалка готовности таски
         taskDoneSwitch() {
             this.currentTask.done = this.currentTask.done !== true;
             this.lineThroughRender()
+            this.scaleSwitch()
             this.storage.update(this.tasks);
         },
 
+        // зачеркивание линией задачи при таск done
         lineThroughRender() {
             if (this.currentTask.done === true) {
                 this.currentTask.lineThrough = 'line-through';
@@ -138,21 +101,46 @@ new Vue({
             }
         },
 
-        blurSwitch() {
+        // блюр для задника
+        blurSwitchOn() {
             if (this.blur === 'blur(0px)') {
                 this.blur = 'blur(5px)'
-            } else {
+            }
+        },
+
+        blurSwitchOff() {
+            if (this.blur === 'blur(5px)') {
                 this.blur = 'blur(0px)'
             }
         },
 
-        // Open close outside div window methods by ClickOutside directive
-        toggle(){
+        // скейл размера таски при task done
+        scaleSwitch(){
+          if(this.currentTask.done === true){
+              this.currentTask.scale = 'scale(1.1)'
+          }
+          else {
+              this.currentTask.scale = 'scale(1)'
+          }
+        },
+
+        // методы открытия и закыртия при клике вне его блока
+        toggleAdd() {
             this.openedAdd = true;
         },
 
-        hide(){
+        hideAdd() {
+            this.blurSwitchOff()
             this.openedAdd = false;
-        }
+        },
+
+        toggleDesc() {
+            this.openedDesc = true;
+        },
+
+        hideDesc() {
+            this.blurSwitchOff()
+            this.openedDesc = false;
+        },
     }
 })

@@ -21,11 +21,6 @@ new Vue({
   },
   data: {
     storage: new _storage__WEBPACK_IMPORTED_MODULE_0__.Storage(),
-    displayAddWindow: false,
-    displayTask: false,
-    displayList: true,
-    displayIsDone: false,
-    newLineThrough: 'none',
     blur: 'blur(0px)',
     newTodoName: '',
     newTodoDate: '',
@@ -47,35 +42,17 @@ new Vue({
     tasks: [],
     currentTask: '',
     openedAdd: false,
-    openedList: true
+    openedDesc: false
   },
   mounted: function mounted() {
     // используем хук жизненого цикла vue для загрузки из storage при загрузке самого vue
-
-    /*
-    if (localStorage.getItem('tasks')) {
-    try {
-        this.tasks = JSON.parse(localStorage.getItem('tasks'))
-    } catch (e) {
-        localStorage.removeItem('tasks')
-    }
-    }
-       */
     this.tasks = this.storage.get(this.tasks);
   },
   methods: {
-    openNewTaskWindow: function openNewTaskWindow() {
-      this.displayTask = false;
-      this.displayList = false;
-    },
-    openCloseListItems: function openCloseListItems() {
-      if (this.displayList === true) {
-        this.displayList = false;
-      } else this.displayList = true;
-    },
     openSelectedTask: function openSelectedTask(index, task) {
       this.currentTask = task[index];
-      this.displayTask = true;
+      this.toggleDesc();
+      this.blurSwitchOn();
     },
     addNewTask: function addNewTask() {
       this.tasks.push({
@@ -85,19 +62,11 @@ new Vue({
         time: this.newTodoDate + ' ' + this.newTodoMonth + ' ' + this.newTodoYear,
         color: this.newTodoColor,
         notification: this.newTodoNotification,
-        done: this.newTodoDone,
-        lineThrough: this.newLineThrough
+        done: this.newTodoDone
       });
       this.storage.update(this.tasks);
       this.clearTaskAfterAdding();
     },
-
-    /*
-    saveChangesLocal() {
-        const parsed = JSON.stringify(this.tasks);
-        localStorage.setItem('tasks', parsed)
-    },
-     */
     deleteTask: function deleteTask(id, done) {
       if (done === true) {
         this.tasks = this.tasks.filter(function (obj) {
@@ -105,7 +74,7 @@ new Vue({
         });
         this.currentTask = '';
         this.storage.update(this.tasks);
-        this.displayTask = false;
+        this.hideDesc();
       } else {
         alert('Mark task done to remove it');
       }
@@ -119,11 +88,14 @@ new Vue({
       this.newTodoNotification = '';
       this.newTodoColor = '#000000';
     },
+    // переключалка готовности таски
     taskDoneSwitch: function taskDoneSwitch() {
       this.currentTask.done = this.currentTask.done !== true;
       this.lineThroughRender();
+      this.scaleSwitch();
       this.storage.update(this.tasks);
     },
+    // зачеркивание линией задачи при таск done
     lineThroughRender: function lineThroughRender() {
       if (this.currentTask.done === true) {
         this.currentTask.lineThrough = 'line-through';
@@ -131,19 +103,39 @@ new Vue({
         this.currentTask.lineThrough = 'none';
       }
     },
-    blurSwitch: function blurSwitch() {
+    // блюр для задника
+    blurSwitchOn: function blurSwitchOn() {
       if (this.blur === 'blur(0px)') {
         this.blur = 'blur(5px)';
-      } else {
+      }
+    },
+    blurSwitchOff: function blurSwitchOff() {
+      if (this.blur === 'blur(5px)') {
         this.blur = 'blur(0px)';
       }
     },
-    // Open close outside div window methods by ClickOutside directive
-    toggle: function toggle() {
+    // скейл размера таски при task done
+    scaleSwitch: function scaleSwitch() {
+      if (this.currentTask.done === true) {
+        this.currentTask.scale = 'scale(1.1)';
+      } else {
+        this.currentTask.scale = 'scale(1)';
+      }
+    },
+    // методы открытия и закыртия при клике вне его блока
+    toggleAdd: function toggleAdd() {
       this.openedAdd = true;
     },
-    hide: function hide() {
+    hideAdd: function hideAdd() {
+      this.blurSwitchOff();
       this.openedAdd = false;
+    },
+    toggleDesc: function toggleDesc() {
+      this.openedDesc = true;
+    },
+    hideDesc: function hideDesc() {
+      this.blurSwitchOff();
+      this.openedDesc = false;
     }
   }
 });
@@ -174,20 +166,24 @@ var Storage = /*#__PURE__*/function () {
 
   _createClass(Storage, [{
     key: "get",
-    value: function get(tasks) {
-      tasks = JSON.parse(localStorage.getItem('tasks'));
+    value: // получаем таски с условием если их нет, удалить из сторадж ключ с именем хранилища
+    function get(tasks) {
+      if (localStorage.getItem('tasks')) {
+        try {
+          tasks = JSON.parse(localStorage.getItem('tasks'));
+        } catch (e) {
+          localStorage.removeItem('tasks');
+        }
+      }
+
       return tasks;
-    }
+    } // метод используется для добваления, редактирования и удаления таски
+
   }, {
     key: "update",
     value: function update(tasks) {
       var parsed = JSON.stringify(tasks);
       localStorage.setItem('tasks', parsed);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(key) {
-      localStorage.removeItem(key);
     }
   }]);
 

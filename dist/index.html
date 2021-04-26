@@ -15,8 +15,8 @@
 <body style="margin: 0">
 
 <div class="main-window" id="app">
-    <div class="add-todo" v-click-outside="hide" v-show="openedAdd">
-            <form>
+    <div class="add-todo" v-click-outside="hideAdd" v-show="openedAdd">
+        <form action="" v-on:submit="hideAdd" @submit.prevent="addNewTask()" v-on:submit="blurSwitchOff">
                 <hr class="todo__line">
                 <h1 class="window-title">
                     Create New Tasks
@@ -44,20 +44,24 @@
 
                 <h2 class="todo__title">
                     Choose color
+                    <a class="todo__help">
+                        <img src="images/color-help.svg" alt="Color task selector" title="Choose color of your task">
+                    </a>
                     <br>
                 </h2>
                 <input v-model="newTodoColor" class="todo__input_color" type="color">
 
                 <br>
-                <button type="submit" class="todo__addBtn" v-on:click="addNewTask()">
+                <button type="submit" class="todo__addBtn" >
                     ADD
                 </button>
             </form>
     </div>
     <div class="list-todo" v-bind:style="{filter: this.blur}">
         <p class="all-done" v-if="tasks.length === 0">All tasks done ! Add new one</p>
-        <div class="todo-element"  v-for="(item, index) in tasks" v-on:click="openSelectedTask(index, tasks)">
+        <div class="todo-element" v-for="(item, index) in tasks" v-bind:style="{transform: item.scale}" v-on:click="openSelectedTask(index, tasks)">
             <p class="item__done" v-if="item.done === true">✓</p>
+            <p class="item__done item__undone_list" v-else>✖</p>
             <button class="todo-item">
             <span class="item__title">
                 {{item.name}}
@@ -68,18 +72,18 @@
             </button>
         </div>
 
-        <button class="add-btn" @click="toggle" v-on:click="blurSwitch" id="addWindow">
+        <button class="add-btn" @click="toggleAdd" v-on:click="blurSwitchOn" id="addWindow">
             <img class="add__img" src="images/cross.svg" alt="">
         </button>
 
     </div>
-    <div class="description-todo" v-show="displayTask">
-        <div class="todo-list" style="width: 100%">
+    <div class="description-todo">
+        <div class="description-content" v-click-outside="hideDesc" v-show="openedDesc">
 
             <h2 class="description__title">
+                <div v-bind:style="{ background: currentTask.color }" class="description__color"></div>
                 <p v-bind:style="{textDecorationLine: this.currentTask.lineThrough}">
                     {{currentTask.name}}
-                <div v-bind:style="{ background: currentTask.color }" class="description__color"></div>
                 </p>
             </h2>
 
